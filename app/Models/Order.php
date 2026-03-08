@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
 
 class Order extends Model
@@ -26,6 +27,7 @@ class Order extends Model
         'user_id',
         'status',
         'amount',
+        'total_amount',
         'completed_at',
     ];
 
@@ -35,7 +37,8 @@ class Order extends Model
     protected function casts(): array
     {
         return [
-            'amount' => 'decimal:2',
+            'amount'       => 'decimal:2',
+            'total_amount' => 'decimal:2',
             'completed_at' => 'datetime',
         ];
     }
@@ -43,6 +46,11 @@ class Order extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function orderItems(): HasMany
+    {
+        return $this->hasMany(OrderItem::class);
     }
 
     /**
